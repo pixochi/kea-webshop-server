@@ -9,17 +9,20 @@ const connectionManager = getConnectionManager();
 
 export const initDbConnection = () => {
   return connectionManager.create({
-    type: 'mysql',
-    host: process.env.MYSQL_HOST,
-    port: 3306,
-    username: process.env.MYSQL_USERNAME,
-    password: process.env.MYSQL_PASSWORD,
-    database: 'kea-webshop',
+    type: 'mssql',
+    host: process.env.MSSQL_HOST,
+    port: Number(process.env.MSSQL_PORT),
+    username: process.env.MSSQL_USERNAME,
+    password: process.env.MSSQL_PASSWORD,
+    database: process.env.MSSQL_DB,
     synchronize: true,
     logger: 'advanced-console',
     logging: 'all',
+    options: {
+      encrypt: true,
+    },
     // dropSchema: true,
     // cache: true,
-    entities: [`${__dirname}/entity/*.ts`],
+    entities: [`${__dirname}/src/entity/*.ts`],
   });
 };
