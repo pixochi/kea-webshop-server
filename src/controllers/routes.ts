@@ -1,7 +1,8 @@
 import {app} from '../index';
+import Controller from '../controllers/product';
 
 app.get('/products', (req, res) => {
-    return res.send('products');
+    const controller = new Controller();
 });
   
 app.post('/login', (req, res) => {
