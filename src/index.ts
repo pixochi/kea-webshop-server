@@ -13,7 +13,7 @@ app.use('/', routes);
 
 app.listen(SERVER_DEV_PORT, async () => {
   console.log(`KEA-webshop server listening on port ${SERVER_DEV_PORT}!`);
-  console.log('Connecting to MySQL db...');
-  await initDbConnection();
+  console.log('Connecting to MSSQL db...');
+  await initDbConnection().connect();
   console.log('Connected!');
 });

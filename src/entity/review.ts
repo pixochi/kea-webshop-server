@@ -1,24 +1,22 @@
-import {Entity, PrimaryGeneratedColumn, ManyToOne, Column, Unique} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, ManyToOne, Column} from 'typeorm';
 
 import User from './user';
 import Product from './product';
 
 @Entity()
-@Unique('UQ_LIKE', ['userId', 'statusId'])
 export default class Review {
-
   @PrimaryGeneratedColumn()
-  id: string;
+  readonly id: string;
 
-  @ManyToOne(type => User, user => user.reviews)
+  @Column('text')
+  body: string;
+
+  @Column('float')
+  rating: number;
+
+  @ManyToOne(() => User, user => user.reviews)
   user: User;
 
-  @Column('int')
-  userId: string;
-
-  @ManyToOne(type => Product, product => product.review, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Product, product => product.reviews)
   product: Product;
-
-  @Column('int')
-  productId: string;
 }

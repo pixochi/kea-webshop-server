@@ -1,4 +1,4 @@
-import {getConnection, Repository} from "typeorm";
+import {getConnection, Repository} from 'typeorm';
 
 import ProductEntity from '../entity/product';
 
