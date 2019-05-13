@@ -14,7 +14,7 @@ export const initDbConnection = () => {
     port: 3306,
     username: process.env.MYSQL_USERNAME,
     password: process.env.MYSQL_PASSWORD,
-    database: 'kea-webshop',
+    database: 'schooldb',
     synchronize: true,
     logger: 'advanced-console',
     logging: 'all',
