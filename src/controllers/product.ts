@@ -1,10 +1,10 @@
-import {getConnection} from "typeorm";
+import {getConnection, Repository} from "typeorm";
 
 import ProductEntity from '../entity/product';
 
 export default class ProductController {
 
-  productRepository;
+  productRepository: Repository<ProductEntity>;
 
   constructor() {
     this.productRepository = getConnection().manager.getRepository(ProductEntity);

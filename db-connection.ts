@@ -1,6 +1,6 @@
-import {getConnectionManager} from "typeorm";
+import { getConnectionManager } from "typeorm";
 import * as TypeORM from 'typeorm';
-import {Container} from 'typedi';
+import { Container } from 'typedi';
 
 // used for dependency injection of repositories
 TypeORM.useContainer(Container);

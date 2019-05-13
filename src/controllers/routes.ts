@@ -1,38 +1,38 @@
-import {app} from '../index';
+import { Router } from 'express';
 import Controller from '../controllers/product';
 
-app.get('/products', (req, res) => {
-    const controller = new Controller();
+const router = new Router();
+
+router.get('/products', (req, res) => {
+    return res.send(new Controller().allProducts());
 });
-  
-app.post('/login', (req, res) => {
-  
+
+router.post('/login', (req, res) => {
+
 });
-  
-app.post('/signup', (req, res) => {
+
+router.post('/signup', (req, res) => {
     return res.send('signup')
 });
-  
-  // Review the product
-  
-app.get('/product/:id', (req, res) => {
+
+// Review the product
+router.get('/product/:id', (req, res) => {
     return;
 });
-  
-  //Add to cart
-  
-app.post('/product/:id', (req, res) => {
+
+//Add to cart
+router.post('/product/:id', (req, res) => {
     return;
 });
-  
-  // Purchase items
-  
-app.post('/checkout', (req, res) => {
-  
+
+// Purchase items
+router.post('/checkout', (req, res) => {
+
 });
-  
-  // Post tracking info
-  
-app.post('/tracking', (req, res) => {
-  
+
+// Post tracking info
+router.post('/tracking', (req, res) => {
+
 });
+
+export default router;
