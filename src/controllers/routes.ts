@@ -52,7 +52,7 @@ router.post('/signup', async (req, res) => {
         newUser.email = email;
         newUser.password = password;
         controller.postUser(newUser);
-        return res.redirect('/mainpage');
+        return res.send(newUser);
     }
 });
 
