@@ -19,7 +19,7 @@ export default class ProductController {
   }
 
   async getProductReviews(productId: string) {
-    return await this.productRepository.find({relations: ["reviews"]});
+    return await this.productRepository.find({relations: ["reviews"], where: { id: productId }});
   }
 
   async postProduct() {

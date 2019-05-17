@@ -2,7 +2,8 @@ import { Router } from 'express';
 import productController from '../controllers/product';
 import userController from '../controllers/user';
 import userEntity from '../entity/user';
-//import reviewController from '../controllers/review';
+import reviewEntity from '../entity/review';
+import reviewController from '../controllers/review';
 
 const router = new Router();
 
@@ -56,19 +57,23 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-// Purchase items
-router.post('/checkout', (req, res) => {
-
-});
-
 // Post tracking info
 router.post('/tracking', (req, res) => {
 
 });
 
 // Post a review
-router.post('/product/:id/review', (req, res) => {
+router.post('/product/:id/review', async (req, res) => {
 
+    const productId = req.params.id;
+
+    const newReview = new reviewEntity();
+    newReview.body = req.body.body;
+    newReview.rating = req.body.rating;
+    newReview.user = req.body.userId;
+    newReview.product = productId;
+    const controller = await new reviewController();
+    controller.postReview(newReview);
 });
 
 // Get a review
@@ -76,11 +81,8 @@ router.get('/product/:id/review', async (req, res) => {
 
      const productId = req.params.id;
      const controller = await new productController();
-    // const product = await controller.product(productId);
-
-     const reviews = await controller.getProductReviews(productId);
-     console.log(reviews);
-     //console.log(product);
+     const products = await controller.getProductReviews(productId);
+     return res.send(products[0].reviews);
 });
 
 // Make an order
@@ -89,8 +91,13 @@ router.post('/order', (req, res) => {
 });
 
 // Get user data
-router.post('/user/:id', (req, res) => {
+router.get('/user/:id', (req, res) => {
 
+});
+
+// Update user data on order
+router.put('/user/:id', async (req, res) => {
+    
 });
 
 
