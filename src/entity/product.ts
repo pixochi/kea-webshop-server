@@ -1,8 +1,9 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne, ManyToMany, JoinTable} from 'typeorm';
 
 import Review from './review';
 import Category from './category';
 import OrderItem from './order-item';
+import ProductRegistry from './product-registry';
 
 @Entity()
 export default class Product {
@@ -34,4 +35,8 @@ export default class Product {
 
   @OneToOne(() => OrderItem, orderItem => orderItem.product)
   orderItem: OrderItem;
+
+  @ManyToMany(() => ProductRegistry, productRegistry => productRegistry.products)
+  @JoinTable()
+  productRegistries: ProductRegistry[];
 }
