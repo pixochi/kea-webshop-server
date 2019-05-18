@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToMany} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from 'typeorm';
 
 import Product from './product';
 
@@ -14,6 +14,9 @@ export default class ProductRegistry {
   })
   amount: number;
 
-  @ManyToMany(() => Product, product => product.productRegistries)
-  products: Product[];
+  @Column({nullable: true}) // TODO: remove all productRegistries from the table and make it non-nullable
+  country: string;
+
+  @ManyToOne(() => Product, product => product.productRegistries)
+  product: Product;
 }

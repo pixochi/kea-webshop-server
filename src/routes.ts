@@ -100,6 +100,7 @@ router.post('/order', async (req, res) => {
     const {
         items,
         userId,
+        country,
     } = req.body;
 
     const orderController = await new OrderController();
@@ -113,14 +114,15 @@ router.post('/order', async (req, res) => {
         const {
             price,
             id,
+            amount,
         } = item;
 
         const product = new Product();
         product.id = id;
-        product.price = price;
 
         const itemEntity = new OrderItemEntity();
         itemEntity.price = price;
+        itemEntity.amount = amount;
         itemEntity.order = newOrder;
         itemEntity.product = product;
 
@@ -129,6 +131,7 @@ router.post('/order', async (req, res) => {
 
     const user = new User();
     user.id = userId;
+    user.country = country;
 
     newOrder.items = orderItems;
     newOrder.user = user;
@@ -144,7 +147,7 @@ router.post('/order', async (req, res) => {
 
     await Promise.all<OrderItemEntity>(orderItemsPromises);
 
-    return savedOrder;
+    return res.send(savedOrder);
 });
 
 // Get user data

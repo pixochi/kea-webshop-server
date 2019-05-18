@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne, ManyToMany, JoinTable} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne} from 'typeorm';
 
 import Review from './review';
 import Category from './category';
@@ -33,10 +33,9 @@ export default class Product {
   @OneToMany(() => Review, review => review.product, {onDelete: 'CASCADE'})
   reviews: Review[];
 
-  @OneToOne(() => OrderItem, orderItem => orderItem.product)
+  @OneToMany(() => OrderItem, orderItem => orderItem.product)
   orderItem: OrderItem;
 
-  @ManyToMany(() => ProductRegistry, productRegistry => productRegistry.products)
-  @JoinTable()
+  @OneToMany(() => ProductRegistry, productRegistry => productRegistry.product)
   productRegistries: ProductRegistry[];
 }
