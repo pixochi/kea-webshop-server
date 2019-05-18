@@ -9,17 +9,17 @@ export default class ProductController {
   constructor() {
     this.productRepository = getConnection().manager.getRepository(ProductEntity);
   };
-  
-  async product(productId: string) {
-    return await this.productRepository.findOne({id: productId});
-  }
 
+  async product(productId: string) {
+    return await getConnection().manager.query(`EXECUTE getProductById ${productId};`);
+  }
+  
   async allProducts(){
-    return await this.productRepository.find();
+    return await getConnection().manager.query(`EXECUTE getAllProducts;`);
   }
 
   async getProductReviews(productId: string) {
-    return await this.productRepository.find({relations: ["reviews"], where: { id: productId }});
+    return await this.productRepository.find({relations: ['reviews'], where: { id: productId }});
   }
 
   async postProduct() {

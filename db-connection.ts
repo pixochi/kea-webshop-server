@@ -24,5 +24,6 @@ export const initDbConnection = () => {
     // dropSchema: true,
     // cache: true,
     entities: [`${__dirname}/src/entity/*.ts`],
+    subscribers: [`${__dirname}/src/subscribers/*.ts`],
   });
 };

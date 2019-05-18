@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from 'typeorm';
 
 import Order from './order';
 import Product from './product';
@@ -12,10 +12,18 @@ export default class OrderItem {
   @Column('decimal', {precision: 13, scale: 4})
   price: number;
 
+  // price at the time of placing the order
+  @Column({
+    type: 'int',
+    unsigned: true,
+    default: 1,
+    nullable: true,
+  })
+  amount: number;
+
   @ManyToOne(() => Order, order => order.items)
   order: Order;
 
-  @OneToOne(() => Product, product => product.orderItem, {onDelete: 'CASCADE'})
-  @JoinColumn() // adds a foreign key
+  @ManyToOne(() => Product, product => product.orderItem, {onDelete: 'CASCADE', cascade: true})
   product: Product;
 }

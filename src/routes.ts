@@ -1,9 +1,18 @@
 import { Router } from 'express';
-import productController from '../controllers/product';
-import userController from '../controllers/user';
-import userEntity from '../entity/user';
-import reviewEntity from '../entity/review';
-import reviewController from '../controllers/review';
+import uuidv4 from 'uuid/v4';
+
+import userEntity from './entity/user';
+import reviewEntity from './entity/review';
+import OrderEntity from './entity/order';
+import OrderItemEntity from './entity/order-item';
+
+import productController from './controllers/product';
+import userController from './controllers/user';
+import reviewController from './controllers/review';
+import OrderController from './controllers/order';
+import OrderItemController from './controllers/order-item';
+import User from './entity/user';
+import Product from './entity/product';
 
 const router = new Router();
 
@@ -28,7 +37,7 @@ router.post('/login', async (req, res) => {
     let user = await controller.checkIfExists(email);
 
     if (user) {
-        if (user.password == password) {
+        if (user.password === password) {
             return res.send({user: user, allProducts: await productControl.allProducts()});
         } else {
             return res.send('Incorrect credentials');
@@ -85,9 +94,60 @@ router.get('/product/:id/review', async (req, res) => {
      return res.send(products[0].reviews);
 });
 
-// Make an order
-router.post('/order', (req, res) => {
+// Place an order
+// TODO: potential transaction
+router.post('/order', async (req, res) => {
+    const {
+        items,
+        userId,
+        country,
+    } = req.body;
 
+    const orderController = await new OrderController();
+    const orderItemController = await new OrderItemController();
+
+    const newOrder = new OrderEntity();
+    const orderId = uuidv4();
+    newOrder.id = orderId;
+
+    const orderItems = items && items.map(item => {
+        const {
+            price,
+            id,
+            amount,
+        } = item;
+
+        const product = new Product();
+        product.id = id;
+
+        const itemEntity = new OrderItemEntity();
+        itemEntity.price = price;
+        itemEntity.amount = amount;
+        itemEntity.order = newOrder;
+        itemEntity.product = product;
+
+        return itemEntity;
+    });
+
+    const user = new User();
+    user.id = userId;
+    user.country = country;
+
+    newOrder.items = orderItems;
+    newOrder.user = user;
+
+    const savedOrder = await orderController.createOrder(newOrder);
+
+    const orderItemsPromises = orderItems.map(item => {
+        return new Promise(async (resolve) => {
+            const savedItem = await orderItemController.createOrderItem(item);
+            resolve(savedItem);
+        });
+    });
+
+    await Promise.all<OrderItemEntity>(orderItemsPromises);
+
+    return res.send(savedOrder);
 });
 
 // Get user data

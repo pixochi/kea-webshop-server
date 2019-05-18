@@ -6,7 +6,7 @@ import Order from './order';
 @Entity()
 export default class User {
   @PrimaryGeneratedColumn()
-  readonly id: string;
+  id: string;
 
   @Column({length: 128, nullable: true})
   firstName?: string;
