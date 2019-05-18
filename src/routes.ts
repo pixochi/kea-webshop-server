@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
     let user = await controller.checkIfExists(email);
 
     if (user) {
-        if (user.password == password) {
+        if (user.password === password) {
             return res.send({user: user, allProducts: await productControl.allProducts()});
         } else {
             return res.send('Incorrect credentials');
