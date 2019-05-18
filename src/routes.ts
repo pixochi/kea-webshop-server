@@ -1,9 +1,18 @@
 import { Router } from 'express';
-import productController from '../controllers/product';
-import userController from '../controllers/user';
-import userEntity from '../entity/user';
-import reviewEntity from '../entity/review';
-import reviewController from '../controllers/review';
+import uuidv4 from 'uuid/v4';
+
+import userEntity from './entity/user';
+import reviewEntity from './entity/review';
+import OrderEntity from './entity/order';
+import OrderItemEntity from './entity/order-item';
+
+import productController from './controllers/product';
+import userController from './controllers/user';
+import reviewController from './controllers/review';
+import OrderController from './controllers/order';
+import OrderItemController from './controllers/order-item';
+import User from './entity/user';
+import Product from './entity/product';
 
 const router = new Router();
 
@@ -85,9 +94,57 @@ router.get('/product/:id/review', async (req, res) => {
      return res.send(products[0].reviews);
 });
 
-// Make an order
-router.post('/order', (req, res) => {
+// Place an order
+// TODO: potential transaction
+router.post('/order', async (req, res) => {
+    const {
+        items,
+        userId,
+    } = req.body;
 
+    const orderController = await new OrderController();
+    const orderItemController = await new OrderItemController();
+
+    const newOrder = new OrderEntity();
+    const orderId = uuidv4();
+    newOrder.id = orderId;
+
+    const orderItems = items && items.map(item => {
+        const {
+            price,
+            id,
+        } = item;
+
+        const product = new Product();
+        product.id = id;
+        product.price = price;
+
+        const itemEntity = new OrderItemEntity();
+        itemEntity.price = price;
+        itemEntity.order = newOrder;
+        itemEntity.product = product;
+
+        return itemEntity;
+    });
+
+    const user = new User();
+    user.id = userId;
+
+    newOrder.items = orderItems;
+    newOrder.user = user;
+
+    const savedOrder = await orderController.createOrder(newOrder);
+
+    const orderItemsPromises = orderItems.map(item => {
+        return new Promise(async (resolve) => {
+            const savedItem = await orderItemController.createOrderItem(item);
+            resolve(savedItem);
+        });
+    });
+
+    await Promise.all<OrderItemEntity>(orderItemsPromises);
+
+    return savedOrder;
 });
 
 // Get user data

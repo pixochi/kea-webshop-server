@@ -8,7 +8,7 @@ import ProductRegistry from './product-registry';
 @Entity()
 export default class Product {
   @PrimaryGeneratedColumn()
-  readonly id: string;
+  id: string;
 
   @Column({length: 128})
   name: string;

@@ -15,7 +15,7 @@ export default class OrderItem {
   @ManyToOne(() => Order, order => order.items)
   order: Order;
 
-  @OneToOne(() => Product, product => product.orderItem, {onDelete: 'CASCADE'})
+  @OneToOne(() => Product, product => product.orderItem, {onDelete: 'CASCADE', cascade: true})
   @JoinColumn() // adds a foreign key
   product: Product;
 }

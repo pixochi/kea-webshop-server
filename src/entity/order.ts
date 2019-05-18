@@ -1,14 +1,14 @@
-import {Entity, PrimaryGeneratedColumn, ManyToOne, Column} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, OneToMany} from 'typeorm';
 
 import User from './user';
 import OrderItem from './order-item';
 
 @Entity()
 export default class Order {
-  @PrimaryGeneratedColumn()
-  readonly id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column('datetime')
+  @CreateDateColumn({type: 'datetime'})
   orderedAt: Date;
 
   // TODO: add a shipping method?
@@ -16,6 +16,6 @@ export default class Order {
   @ManyToOne(() => User, user => user.orders)
   user: User;
 
-  @ManyToOne(() => OrderItem, orderItem => orderItem.order)
+  @OneToMany(() => OrderItem, orderItem => orderItem.order, {cascade: ['insert']})
   items: OrderItem[];
 }

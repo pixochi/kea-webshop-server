@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 
-import routes from '../src/controllers/routes';
+import routes from './routes';
 import bodyParser from 'body-parser';
 import {initDbConnection} from '../db-connection';
 
