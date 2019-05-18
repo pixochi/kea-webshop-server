@@ -12,7 +12,8 @@ export default class OrderSubscriber implements EntitySubscriberInterface<OrderE
         return OrderEntity;
     }
 
-    // called after OrderEntity insertion
+		// called after OrderEntity insertion
+		// TODO: use transactions beforeInsert?
     async afterInsert(event: InsertEvent<OrderEntity>) {
         const {
             user,
