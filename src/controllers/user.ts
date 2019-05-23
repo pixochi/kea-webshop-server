@@ -1,6 +1,7 @@
 import {getConnection, Repository} from 'typeorm';
 
 import UserEntity from '../entity/user';
+import User from '../entity/user';
 
 export default class UserController {
 
@@ -26,8 +27,20 @@ export default class UserController {
     return await this.userRepository.find();
   }
 
-  async postUser(newUser) {
+  async createUser(newUser: Partial<Exclude<UserEntity, 'id'>>) {
     return await this.userRepository.save(newUser);
+  }
+
+  async changePassword(userId: string, newPassword: string) {
+    const user = new User();
+    user.id = userId;
+    user.password = newPassword;
+
+    return await this.userRepository.save(user);
+  }
+
+  async updateUser(userId: string, updatedUserProps: Partial<Exclude<UserEntity, 'id'>>) {
+    return await this.userRepository.update(userId, updatedUserProps);
   }
 
 }

@@ -17,6 +17,9 @@ export default class User {
   @Column({unique: true, length: 64})
   email: string;
 
+  @Column({length: 128, nullable: true})
+  previousPassword: string;
+
   @Column({length: 128})
   password: string;
 
