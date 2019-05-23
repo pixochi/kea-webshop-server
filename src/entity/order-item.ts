@@ -12,7 +12,6 @@ export default class OrderItem {
   @Column('decimal', {precision: 13, scale: 4})
   price: number;
 
-  // price at the time of placing the order
   @Column({
     type: 'int',
     unsigned: true,
