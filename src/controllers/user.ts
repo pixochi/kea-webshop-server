@@ -4,11 +4,11 @@ import UserEntity from '../entity/user';
 
 export default class UserController {
 
-  userRepository: Repository<UserEntity>;
+  private userRepository: Repository<UserEntity>;
 
   constructor() {
     this.userRepository = getConnection().manager.getRepository(UserEntity);
-  };
+  }
 
   async user(userId: string) {
     return await this.userRepository.findOne({id: userId});
@@ -26,8 +26,12 @@ export default class UserController {
     return await this.userRepository.find();
   }
 
-  async postUser(newUser) {
+  async createUser(newUser: any) {
     return await this.userRepository.save(newUser);
+  }
+
+  async deleteByProperties(properties: Partial<UserEntity>) {
+    return await this.userRepository.delete(properties);
   }
 
 }

@@ -61,7 +61,7 @@ router.post('/signup', async (req, res) => {
         const newUser = new userEntity();
         newUser.email = email;
         newUser.password = password;
-        controller.postUser(newUser);
+        controller.createUser(newUser);
         return res.send(newUser);
     }
 });

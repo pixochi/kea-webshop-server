@@ -5,7 +5,7 @@
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "dev": "yarn && nodemon .",
-    "test": "mocha -r ts-node/register test/**/test.ts"
+    "test": "yarn && ./node_modules/.bin/ts-mocha --timeout 10000 --paths -p ./tsconfig.json test/tests-setup.ts test/**/*.ts"
   },
   "license": "MIT",
   "dependencies": {
