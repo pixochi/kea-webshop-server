@@ -310,7 +310,7 @@ describe('Testing postReview method', () => {
           await expect(reviewController.postReview(review)).to.be.rejectedWith(`Review rating must be between 1 and 10!`);
      });
 
-     it('should check if review is assigned to a product', async () => {
+     it('should check if review is not assigned to a product', async () => {
 
           // Create User and product entities for the review
 
@@ -330,6 +330,30 @@ describe('Testing postReview method', () => {
 
           // Post the review to the database
           const returnedReview = await reviewController.postReview(review);
-          expect(returnedReview.product).to.be.not.null;
+          expect(returnedReview.product).to.be.undefined;
+     });
+     
+     it('should check if review is assigned to a product', async () => {
+
+          // Create User and product entities for the review
+
+          const user = new UserEntity();
+          const reviewController = new ReviewController();
+
+          user.id = '1';
+
+          const product = new ProductEntity();
+          product.id = '1';
+
+          // Create a new review
+          const review = new ReviewEntity();
+          review.rating = 10;
+          review.body = 'Chine delivers!';
+          review.user = user;
+          review.product = product;
+
+          // Post the review to the database
+          const returnedReview = await reviewController.postReview(review);
+          expect(returnedReview.product).to.be.not.undefined;
      });
 });
