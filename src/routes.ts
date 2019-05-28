@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import uuidv4 from 'uuid/v4';
 
-import userEntity from './entity/user';
-import reviewEntity from './entity/review';
+import UserEntity from './entity/user';
+import ReviewEntity from './entity/review';
 import OrderEntity from './entity/order';
 import OrderItemEntity from './entity/order-item';
 
-import productController from './controllers/product';
-import userController from './controllers/user';
-import reviewController from './controllers/review';
+import ProductController from './controllers/product';
+import UserController from './controllers/user';
+import ReviewController from './controllers/review';
 import OrderController from './controllers/order';
 import OrderItemController from './controllers/order-item';
 import User from './entity/user';
@@ -17,20 +17,20 @@ import Product from './entity/product';
 const router = new Router();
 
 router.get('/products', async (req, res) => {
-    return res.send(await new productController().allProducts());
+    return res.send(await new ProductController().allProducts());
 });
 
 // Review the product
 router.get('/product/:id', async (req, res) => {
 
     const productId = req.params.id;
-    return res.send(await new productController().product(productId));
+    return res.send(await new ProductController().product(productId));
 });
 
 router.post('/login', async (req, res) => {
 
-    const controller = await new userController();
-    const productControl = await new productController();
+    const controller = await new UserController();
+    const productControl = await new ProductController();
     const email = req.body.email;
     const password = req.body.password;
 
@@ -49,7 +49,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
 
-    const controller = await new userController();
+    const controller = await new UserController();
     const email = req.body.email;
     const password = req.body.password;
 
@@ -58,12 +58,21 @@ router.post('/signup', async (req, res) => {
     if (user) {
         return res.send('This email is already taken!')
     } else {
-        const newUser = new userEntity();
+        const newUser = new UserEntity();
         newUser.email = email;
         newUser.password = password;
         controller.createUser(newUser);
         return res.send(newUser);
     }
+});
+
+router.put('/user/change-password', async (req, res) => {
+    const userController = await new UserController();
+    const {userId, password} = req.body;
+
+    const updateResult = await userController.changePassword(userId, password);
+
+    return res.send(updateResult);
 });
 
 // Post tracking info
@@ -76,12 +85,12 @@ router.post('/product/:id/review', async (req, res) => {
 
     const productId = req.params.id;
 
-    const newReview = new reviewEntity();
+    const newReview = new ReviewEntity();
     newReview.body = req.body.body;
     newReview.rating = req.body.rating;
     newReview.user = req.body.userId;
     newReview.product = productId;
-    const controller = await new reviewController();
+    const controller = await new ReviewController();
     controller.postReview(newReview);
 });
 
@@ -89,7 +98,7 @@ router.post('/product/:id/review', async (req, res) => {
 router.get('/product/:id/review', async (req, res) => {
 
      const productId = req.params.id;
-     const controller = await new productController();
+     const controller = await new ProductController();
      const products = await controller.getProductReviews(productId);
      return res.send(products[0].reviews);
 });
@@ -159,6 +168,7 @@ router.get('/user/:id', (req, res) => {
 router.put('/user/:id', async (req, res) => {
     
 });
+
 
 
 export default router;
