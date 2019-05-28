@@ -5,11 +5,11 @@ import User from '../entity/user';
 
 export default class UserController {
 
-  userRepository: Repository<UserEntity>;
+  private userRepository: Repository<UserEntity>;
 
   constructor() {
     this.userRepository = getConnection().manager.getRepository(UserEntity);
-  };
+  }
 
   async user(userId: string) {
     return await this.userRepository.findOne({id: userId});
@@ -25,6 +25,10 @@ export default class UserController {
 
   async allUsers(){
     return await this.userRepository.find();
+  }
+
+  async deleteByProperties(properties: Partial<UserEntity>) {
+    return await this.userRepository.delete(properties);
   }
 
   async createUser(newUser: Partial<Exclude<UserEntity, 'id'>>) {

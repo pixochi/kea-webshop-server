@@ -5,7 +5,7 @@ import Product from './product';
 @Entity()
 export default class Category {
   @PrimaryGeneratedColumn()
-  readonly id: string;
+  id: string;
 
   @Column({length: 128})
   name: string;
