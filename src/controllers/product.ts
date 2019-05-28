@@ -22,8 +22,9 @@ export default class ProductController {
     return await this.productRepository.find({relations: ['reviews'], where: { id: productId }});
   }
 
-  async postProduct() {
-    return await this.productRepository.save({});
+  async postProduct(product: ProductEntity) {
+    if (product.rating > 10 || product.rating < 1) throw new Error('Product rating must be between 1 and 10!');
+    return await this.productRepository.save(product);
   }
 
 }
