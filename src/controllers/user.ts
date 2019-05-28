@@ -29,6 +29,7 @@ export default class UserController {
 
   async deleteByProperties(properties: Partial<UserEntity>) {
     return await this.userRepository.delete(properties);
+  }
 
   async createUser(newUser: Partial<Exclude<UserEntity, 'id'>>) {
     return await this.userRepository.save(newUser);

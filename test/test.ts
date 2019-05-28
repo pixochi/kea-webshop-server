@@ -168,7 +168,7 @@ describe('Testing postProduct method', () => {
           product.category = category;
 
           const returnedProduct = await productController.postProduct(product);
-          expect(returnedProduct).to.haveOwnProperty('category');
+          expect(returnedProduct.category.id).equals(category.id);
      });
 
      it('should return a product with rating less than 10.1', async () => {
@@ -213,7 +213,7 @@ describe('Testing postProduct method', () => {
           product.category = category;
 
           const returnedProduct = await productController.postProduct(product);
-          expect(returnedProduct.price).to.be.a('number');
+          expect(returnedProduct.price).to.equal(product.price);
      });
 });
 
