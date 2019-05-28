@@ -1,7 +1,6 @@
 import { EventSubscriber, EntitySubscriberInterface, InsertEvent } from 'typeorm';
 
 import ProductRegistryController from '../controllers/product-registry';
-
 import OrderEntity from '../entity/order';
 
 @EventSubscriber()
@@ -12,8 +11,8 @@ export default class OrderSubscriber implements EntitySubscriberInterface<OrderE
         return OrderEntity;
     }
 
-		// called after OrderEntity insertion
-		// TODO: use transactions beforeInsert?
+    // called after OrderEntity insertion
+    // TODO: use transactions beforeInsert?
     async afterInsert(event: InsertEvent<OrderEntity>) {
         const {
             user,
