@@ -1,18 +1,12 @@
 import { Router } from 'express';
-import uuidv4 from 'uuid/v4';
 
 import UserEntity from './entity/user';
 import ReviewEntity from './entity/review';
-import OrderEntity from './entity/order';
-import OrderItemEntity from './entity/order-item';
 
 import ProductController from './controllers/product';
 import UserController from './controllers/user';
 import ReviewController from './controllers/review';
 import OrderController from './controllers/order';
-import OrderItemController from './controllers/order-item';
-import User from './entity/user';
-import Product from './entity/product';
 
 const router = new Router();
 
@@ -113,48 +107,7 @@ router.post('/order', async (req, res) => {
     } = req.body;
 
     const orderController = await new OrderController();
-    const orderItemController = await new OrderItemController();
-
-    const newOrder = new OrderEntity();
-    const orderId = uuidv4();
-    newOrder.id = orderId;
-
-    const orderItems = items && items.map(item => {
-        const {
-            price,
-            id,
-            amount,
-        } = item;
-
-        const product = new Product();
-        product.id = id;
-
-        const itemEntity = new OrderItemEntity();
-        itemEntity.price = price;
-        itemEntity.amount = amount;
-        itemEntity.order = newOrder;
-        itemEntity.product = product;
-
-        return itemEntity;
-    });
-
-    const user = new User();
-    user.id = userId;
-    user.country = country;
-
-    newOrder.items = orderItems;
-    newOrder.user = user;
-
-    const savedOrder = await orderController.createOrder(newOrder);
-
-    const orderItemsPromises = orderItems.map(item => {
-        return new Promise(async (resolve) => {
-            const savedItem = await orderItemController.createOrderItem(item);
-            resolve(savedItem);
-        });
-    });
-
-    await Promise.all<OrderItemEntity>(orderItemsPromises);
+    const savedOrder = await orderController.createOrder(items, userId, country);
 
     return res.send(savedOrder);
 });
