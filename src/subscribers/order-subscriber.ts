@@ -1,4 +1,4 @@
-// THIS CODE CAN REPLACE TRIGGERS ON ORDER_ITEM TABLE
+// THIS CODE CAN REPLACE TRIGGERS ON `ORDER_ITEM` TABLE
 
 // import { EventSubscriber, EntitySubscriberInterface, InsertEvent } from 'typeorm';
 
