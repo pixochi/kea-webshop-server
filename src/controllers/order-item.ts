@@ -19,7 +19,21 @@ export default class OrderItemController {
   }
 
   async createOrderItem(orderItem: OrderItemEntity) {
-    return await this.orderItemRepository.insert(orderItem);
+    return await getConnection()
+    .createEntityManager()
+    .query(`
+      DECLARE @T TABLE (
+        id     INT,
+        amount INT
+      );
+
+      INSERT INTO "order_item"("price", "amount", "orderId", "productId") OUTPUT
+      INSERTED."id",
+      INSERTED."amount"
+      INTO @T
+      VALUES (@0, @1, @2, @3);
+    `, [orderItem.price, orderItem.amount, orderItem.order.id, orderItem.product.id, ]
+    );
   }
 
 }
