@@ -1,29 +1,28 @@
-import { EventSubscriber, EntitySubscriberInterface, InsertEvent } from 'typeorm';
+// THIS CODE CAN REPLACE TRIGGERS ON `ORDER_ITEM` TABLE
 
-import ProductRegistryController from '../controllers/product-registry';
-import OrderEntity from '../entity/order';
+// import { EventSubscriber, EntitySubscriberInterface, InsertEvent } from 'typeorm';
 
-@EventSubscriber()
-export default class OrderSubscriber implements EntitySubscriberInterface<OrderEntity> {
+// import ProductRegistryController from '../controllers/product-registry';
+// import OrderEntity from '../entity/order';
 
-    // indicates that this subscriber only listen to OrderEntity events
-    listenTo() {
-        return OrderEntity;
-    }
+// @EventSubscriber()
+// export default class OrderSubscriber implements EntitySubscriberInterface<OrderEntity> {
 
-    // called after OrderEntity insertion
-    // TODO: use transactions beforeInsert?
-    async afterInsert(event: InsertEvent<OrderEntity>) {
-        const {
-            user,
-            items,
-        } = event.entity;
+//     // indicates that this subscriber only listen to OrderEntity events
+//     listenTo() {
+//         return OrderEntity;
+//     }
 
-			const productRegistryController = new ProductRegistryController();
+//     async afterInsert(event: InsertEvent<OrderEntity>) {
+//         const {
+//             user,
+//             items,
+//         } = event.entity;
 
-			items.map(item => {
-				productRegistryController.changeAmountInRegistryForProduct(item.product.id, user.country, item.amount * (-1));
-			});
-    }
+// 			const productRegistryController = new ProductRegistryController();
 
-}
+// 			items.map(item => {
+// 				productRegistryController.changeAmountInRegistryForProduct(item.product.id, user.country, item.amount * (-1));
+// 			});
+//     }
+// }

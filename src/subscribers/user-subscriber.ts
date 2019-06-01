@@ -1,30 +1,32 @@
-import { EventSubscriber, EntitySubscriberInterface, UpdateEvent } from 'typeorm';
+// THIS CODE CAN REPLACE TRIGGERS ON `USER` TABLE
 
-import UserController from '../controllers/user';
-import UserEntity from '../entity/user';
+// import { EventSubscriber, EntitySubscriberInterface, UpdateEvent } from 'typeorm';
 
-@EventSubscriber()
-export default class OrderSubscriber implements EntitySubscriberInterface<UserEntity> {
+// import UserController from '../controllers/user';
+// import UserEntity from '../entity/user';
 
-    // indicates that this subscriber only listen to UserEntity events
-    listenTo() {
-        return UserEntity;
-    }
+// @EventSubscriber()
+// export default class OrderSubscriber implements EntitySubscriberInterface<UserEntity> {
 
-    // called after UserEntity update
-    async afterUpdate(event: UpdateEvent<UserEntity>) {
-      const {
-          databaseEntity,
-          updatedColumns,
-      } = event;
+//     // indicates that this subscriber only listen to UserEntity events
+//     listenTo() {
+//         return UserEntity;
+//     }
 
-      const didChangePassword = updatedColumns.some(column => column.propertyName === 'password');
+//     // called after UserEntity update
+//     async afterUpdate(event: UpdateEvent<UserEntity>) {
+//       const {
+//           databaseEntity,
+//           updatedColumns,
+//       } = event;
 
-      if (didChangePassword) {
-        const userController = new UserController();
-        userController.updateUser(databaseEntity.id, {previousPassword: databaseEntity.password});
-      }
+//       const didChangePassword = updatedColumns.some(column => column.propertyName === 'password');
 
-    }
+//       if (didChangePassword) {
+//         const userController = new UserController();
+//         userController.updateUser(databaseEntity.id, {previousPassword: databaseEntity.password});
+//       }
 
-}
+//     }
+
+// }

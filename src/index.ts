@@ -7,7 +7,7 @@ import {initDbConnection} from '../db-connection';
 
 dotenv.config();
 
-const SERVER_DEV_PORT = 4001;
+const SERVER_DEV_PORT = 4000;
 const app = express();
 
 app.use(bodyParser.json());
