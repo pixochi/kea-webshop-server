@@ -1,9 +1,8 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, Check} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from 'typeorm';
 
 import Product from './product';
 
 @Entity()
-@Check(`"amount" > -1`)
 export default class ProductRegistry {
   @PrimaryGeneratedColumn()
   readonly id: string;
