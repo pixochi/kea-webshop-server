@@ -1,0 +1,8 @@
+CREATE ROLE reader AUTHORIZATION marcin;
+GRANT SELECT TO reader;
+ALTER ROLE reader ADD MEMBER getter;
+
+CREATE ROLE writer AUTHORIZATION marcin;
+GRANT INSERT TO writer;
+GRANT UPDATE TO writer;
+ALTER ROLE writer ADD MEMBER poster;
