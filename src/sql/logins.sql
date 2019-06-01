@@ -1,3 +1,7 @@
+-- Logins give access to the SQL server.
+
+USE master;
+
 CREATE LOGIN marcin WITH PASSWORD = '$qwertyuiop123';
 CREATE LOGIN gosia WITH PASSWORD = '$qwertyuiop123';
 CREATE LOGIN paulius WITH PASSWORD = '$qwertyuiop123';
