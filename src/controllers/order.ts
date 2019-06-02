@@ -90,13 +90,13 @@ export default class OrderController {
       });
         await Promise.all(orderItemsPromises);
 
-        // commit transaction now:
+        // commit transaction now
         await queryRunner.commitTransaction();
     } catch (error) {
       // since we have errors lets rollback changes we made
       await queryRunner.rollbackTransaction();
     } finally {
-      // you need to release query runner which is manually created:
+      // you need to release query runner which is manually created
       await queryRunner.release();
       return savedOrder;
     }
