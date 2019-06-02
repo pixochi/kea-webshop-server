@@ -88,8 +88,6 @@ export default class OrderController {
             resolve(savedItem);
         });
       });
-
-      try {
         await Promise.all(orderItemsPromises);
 
         // commit transaction now:
@@ -103,5 +101,4 @@ export default class OrderController {
       return savedOrder;
     }
   }
-
 }
