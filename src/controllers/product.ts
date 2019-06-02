@@ -8,12 +8,12 @@ export default class ProductController {
 
   constructor() {
     this.productRepository = getConnection().manager.getRepository(ProductEntity);
-  };
+  }
 
   async product(productId: string) {
     return await getConnection().manager.query(`EXECUTE getProductById ${productId};`);
   }
-  
+
   async allProducts(){
     return await getConnection().manager.query(`EXECUTE getAllProducts;`);
   }
@@ -23,7 +23,9 @@ export default class ProductController {
   }
 
   async postProduct(product: ProductEntity) {
-    if (product.rating > 10 || product.rating < 1) throw new Error('Product rating must be between 1 and 10!');
+    if (product.rating > 10 || product.rating < 1) {
+      throw new Error('Product rating must be between 1 and 10!');
+    }
     return await this.productRepository.save(product);
   }
 
