@@ -1,19 +1,16 @@
 import { Router } from 'express';
-import uuidv4 from 'uuid/v4';
 
 import UserEntity from './entity/user';
 import ReviewEntity from './entity/review';
-import OrderEntity from './entity/order';
-import OrderItemEntity from './entity/order-item';
 
 import ProductController from './controllers/product';
 import UserController from './controllers/user';
 import ReviewController from './controllers/review';
 import OrderController from './controllers/order';
-import OrderItemController from './controllers/order-item';
-import User from './entity/user';
 import Product from './entity/product';
+
 import Visit from '../src/schemas/visitSchema';
+import Category from './entity/category';
 
 const router = new Router();
 
@@ -46,6 +43,35 @@ router.post('/login', async (req, res) => {
     } else {
         return res.send('Such user doesnt exist!');
     }
+});
+
+router.post('/product', async (req, res) => {
+    const {
+        name,
+        price,
+        description,
+        image,
+        rating,
+        category,
+    } = req.body;
+
+    const productController = new ProductController();
+
+    const productCategory = new Category();
+    productCategory.id = category.id;
+    productCategory.name = category.name;
+
+    const product = new Product();
+    product.name = name;
+    product.price = price;
+    product.description = description;
+    product.image = image;
+    product.rating = rating;
+    product.category = productCategory;
+
+    const newProduct = await productController.postProduct(product);
+
+    res.send(newProduct);
 });
 
 router.post('/signup', async (req, res) => {
@@ -105,7 +131,6 @@ router.get('/product/:id/review', async (req, res) => {
 });
 
 // Place an order
-// TODO: potential transaction
 router.post('/order', async (req, res) => {
     const {
         items,
@@ -114,48 +139,7 @@ router.post('/order', async (req, res) => {
     } = req.body;
 
     const orderController = await new OrderController();
-    const orderItemController = await new OrderItemController();
-
-    const newOrder = new OrderEntity();
-    const orderId = uuidv4();
-    newOrder.id = orderId;
-
-    const orderItems = items && items.map(item => {
-        const {
-            price,
-            id,
-            amount,
-        } = item;
-
-        const product = new Product();
-        product.id = id;
-
-        const itemEntity = new OrderItemEntity();
-        itemEntity.price = price;
-        itemEntity.amount = amount;
-        itemEntity.order = newOrder;
-        itemEntity.product = product;
-
-        return itemEntity;
-    });
-
-    const user = new User();
-    user.id = userId;
-    user.country = country;
-
-    newOrder.items = orderItems;
-    newOrder.user = user;
-
-    const savedOrder = await orderController.createOrder(newOrder);
-
-    const orderItemsPromises = orderItems.map(item => {
-        return new Promise(async (resolve) => {
-            const savedItem = await orderItemController.createOrderItem(item);
-            resolve(savedItem);
-        });
-    });
-
-    await Promise.all<OrderItemEntity>(orderItemsPromises);
+    const savedOrder = await orderController.createOrder(items, userId, country);
 
     return res.send(savedOrder);
 });
