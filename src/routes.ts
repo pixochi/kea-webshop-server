@@ -15,7 +15,10 @@ import User from './entity/user';
 import Product from './entity/product';
 import Visit from '../src/schemas/visitSchema';
 
+import bcrypt from 'bcrypt';
+
 const router = new Router();
+const saltRounds = 10;
 
 router.get('/products', async (req, res) => {
     return res.send(await new ProductController().allProducts());
@@ -38,11 +41,15 @@ router.post('/login', async (req, res) => {
     let user = await controller.checkIfExists(email);
 
     if (user) {
-        if (user.password === password) {
-            return res.send({user: user, allProducts: await productControl.allProducts()});
-        } else {
-            return res.send('Incorrect credentials');
-        }
+
+        bcrypt.compare(password, user.password, async (err, result) => {
+            if (err) console.log(`Error authenticating user ${err}`);
+            if (result) {
+                return res.send({user: user, allProducts: await productControl.allProducts()});
+            } else {
+                return res.send('Incorrect credentials');
+            }
+        });
     } else {
         return res.send('Such user doesnt exist!');
     }
@@ -50,21 +57,26 @@ router.post('/login', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
 
+    console.log(req.body);
     const controller = await new UserController();
     const email = req.body.email;
     const password = req.body.password;
 
-    let user = await controller.checkIfExists(email);
+    await bcrypt.hash(password, saltRounds, async (err, hashedPassword) => {
 
-    if (user) {
-        return res.send('This email is already taken!')
-    } else {
-        const newUser = new UserEntity();
-        newUser.email = email;
-        newUser.password = password;
-        controller.createUser(newUser);
-        return res.send(newUser);
-    }
+        if (err) console.log(`Error occured while hashing password ${err}`);
+        let user = await controller.checkIfExists(email);
+
+        if (user) {
+            return res.send('This email is already taken!')
+        } else {
+            const newUser = new UserEntity();
+            newUser.email = email;
+            newUser.password = hashedPassword;
+            controller.createUser(newUser);
+            return res.send(newUser);
+        }
+    })
 });
 
 router.put('/user/change-password', async (req, res) => {
