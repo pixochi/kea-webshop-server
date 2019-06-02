@@ -13,6 +13,7 @@ import OrderController from './controllers/order';
 import OrderItemController from './controllers/order-item';
 import User from './entity/user';
 import Product from './entity/product';
+import Visit from '../src/schemas/visitSchema';
 
 const router = new Router();
 
@@ -157,6 +158,16 @@ router.post('/order', async (req, res) => {
     await Promise.all<OrderItemEntity>(orderItemsPromises);
 
     return res.send(savedOrder);
+});
+
+// Post user agent data
+router.post('/agent', (req, res) => { 
+
+    const visitData = new Visit(req.body);
+    visitData.save((err) => {
+        if (err) console.log('Cannot save agent data!');
+        console.log('User data posted to the database');
+    });
 });
 
 // Get user data
