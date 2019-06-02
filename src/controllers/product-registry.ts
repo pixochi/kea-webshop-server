@@ -27,6 +27,10 @@ export default class ProductRegistryController {
     return await this.productRegistryRepository.findOne({country});
   }
 
+  async productRegistryByProps(props: any) {
+    return await this.productRegistryRepository.findOne(props);
+  }
+
   async changeAmountInRegistryForProduct(productId: string, country: string, amount: number) {
     const product = new Product();
     product.id = productId;
