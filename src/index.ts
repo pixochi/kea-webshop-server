@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import routes from './routes';
 import bodyParser from 'body-parser';
 import {initDbConnection} from '../db-connection';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
@@ -20,3 +21,13 @@ app.listen(SERVER_DEV_PORT, async () => {
   await initDbConnection().connect();
   console.log('Connected!');
 });
+
+mongoose
+  .connect(process.env.MONGODB_CONNECTION_STRING, { useNewUrlParser: true })
+  .then(() => {
+    console.log("Successfully connected to MongoDB");
+  })
+  .catch(err => {
+    console.log("Could not connect to the database. Exiting now....");
+    process.exit();
+  });

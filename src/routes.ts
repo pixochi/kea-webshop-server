@@ -8,6 +8,8 @@ import UserController from './controllers/user';
 import ReviewController from './controllers/review';
 import OrderController from './controllers/order';
 import Product from './entity/product';
+
+import Visit from '../src/schemas/visitSchema';
 import Category from './entity/category';
 
 const router = new Router();
@@ -140,6 +142,16 @@ router.post('/order', async (req, res) => {
     const savedOrder = await orderController.createOrder(items, userId, country);
 
     return res.send(savedOrder);
+});
+
+// Post user agent data
+router.post('/agent', (req, res) => { 
+
+    const visitData = new Visit(req.body);
+    visitData.save((err) => {
+        if (err) console.log('Cannot save agent data!');
+        console.log('User data posted to the database');
+    });
 });
 
 // Get user data
