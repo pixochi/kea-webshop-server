@@ -7,6 +7,8 @@ import ProductController from './controllers/product';
 import UserController from './controllers/user';
 import ReviewController from './controllers/review';
 import OrderController from './controllers/order';
+import Product from './entity/product';
+import Category from './entity/category';
 
 const router = new Router();
 
@@ -39,6 +41,35 @@ router.post('/login', async (req, res) => {
     } else {
         return res.send('Such user doesnt exist!');
     }
+});
+
+router.post('/product', async (req, res) => {
+    const {
+        name,
+        price,
+        description,
+        image,
+        rating,
+        category,
+    } = req.body;
+
+    const productController = new ProductController();
+
+    const productCategory = new Category();
+    productCategory.id = category.id;
+    productCategory.name = category.name;
+
+    const product = new Product();
+    product.name = name;
+    product.price = price;
+    product.description = description;
+    product.image = image;
+    product.rating = rating;
+    product.category = productCategory;
+
+    const newProduct = await productController.postProduct(product);
+
+    res.send(newProduct);
 });
 
 router.post('/signup', async (req, res) => {
@@ -98,7 +129,6 @@ router.get('/product/:id/review', async (req, res) => {
 });
 
 // Place an order
-// TODO: potential transaction
 router.post('/order', async (req, res) => {
     const {
         items,
