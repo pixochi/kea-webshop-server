@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, Index} from 'typeorm';
 
 import Review from './review';
 import Category from './category';
@@ -28,6 +28,7 @@ export default class Product {
   rating: number;
 
   @ManyToOne(() => Category, category => category.products)
+  @Index()
   category: Category;
 
   @OneToMany(() => Review, review => review.product, {onDelete: 'CASCADE'})

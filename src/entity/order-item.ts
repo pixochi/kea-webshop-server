@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, Index} from 'typeorm';
 
 import Order from './order';
 import Product from './product';
@@ -21,6 +21,7 @@ export default class OrderItem {
   amount: number;
 
   @ManyToOne(() => Order, order => order.items)
+  @Index()
   order: Order;
 
   @ManyToOne(() => Product, product => product.orderItem, {onDelete: 'CASCADE', cascade: true})
