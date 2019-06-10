@@ -37,10 +37,9 @@ export default class UserController {
 
   async changePassword(userId: string, newPassword: string) {
     const user = new User();
-    user.id = userId;
     user.password = newPassword;
-
-    return await this.userRepository.save(user);
+    
+    return await this.userRepository.update(userId, user);
   }
 
   async updateUser(userId: string, updatedUserProps: Partial<Exclude<UserEntity, 'id'>>) {
