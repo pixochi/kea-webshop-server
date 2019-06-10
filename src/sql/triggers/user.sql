@@ -18,5 +18,5 @@ DECLARE @UserId INT,
 BEGIN
   UPDATE dbo.[user]
   SET previousPassword = @CurrentPassword
-  WHERE id = 10
+  WHERE id = @UserId
 END
