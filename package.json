@@ -17,7 +17,7 @@
     "chai-as-promised": "^7.1.1",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
-    "mongoose": "^5.5.12",
+    "mongoose": "^5.7.5",
     "mssql": "^5.1.0",
     "nodemon": "^1.19.0",
     "reflect-metadata": "^0.1.13",
